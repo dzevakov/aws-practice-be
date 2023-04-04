@@ -1,0 +1,27 @@
+{
+  "name": "aws-practice-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "build-product": "node product-service/esbuild.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dzevakov/aws-practice-be.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "babel-jest": "^29.5.0",
+    "esbuild": "^0.17.15",
+    "jest": "^29.5.0",
+    "jest-mock": "^29.5.0",
+    "serverless": "^3.20.0",
+    "serverless-s3-cleaner": "^2.0.2"
+  }
+}
