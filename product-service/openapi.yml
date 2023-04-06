@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: Bicycle Shop API
+  description: Bicycle Shop API
+  version: '1'  
+servers:
+  - url: https://h7mjy48u62.execute-api.us-east-1.amazonaws.com
+tags:
+  - name: products
+    description: Product Service domain
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Returns products list
+      description: List of available products
+      operationId: getProductList
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'          
+        '500':
+          description: Internal server error
+  /products/{itemId}:
+    get:
+      tags:
+        - products
+      summary: Finds Product by ID
+      description: Retursn product by ID.
+      operationId: getProduct
+      parameters:
+        - name: itemId
+          in: path
+          description: Tags to filter by
+          required: true
+          explode: true
+          schema:
+            type: string
+            items:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Product'          
+        '400':
+          description: Invalid tag value
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Gravel Bike - glossy metallic midnight blue
+        id:
+          type: string
+          example: bc-1
+        price:
+          type: number
+          example: 2400
+        title:
+          type: string
+          example: Bombtrack
+        count:
+          type: number
+          example: 1
