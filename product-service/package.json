@@ -14,5 +14,10 @@
     "serverless": "^3.20.0",
     "serverless-s3-cleaner": "^2.0.2",
     "serverless-openapi-documentation": "^0.4.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.309.0",
+    "@aws-sdk/lib-dynamodb": "^3.309.0",
+    "aws-sdk": "^2.1353.0"
   }
 }

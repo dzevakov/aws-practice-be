@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "build-product": "node product-service/esbuild.config.js"
+    "build-product": "node product-service/esbuild.config.js",
+    "tables-init": "node utils/fillProductsTables.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,10 @@
     "jest-mock": "^29.5.0",
     "serverless": "^3.20.0",
     "serverless-s3-cleaner": "^2.0.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.309.0",
+    "@aws-sdk/lib-dynamodb": "^3.309.0",
+    "aws-sdk": "^2.1353.0"
   }
 }

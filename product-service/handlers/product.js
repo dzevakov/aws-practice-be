@@ -1,15 +1,22 @@
-import { MockDataService } from '../mocks/mockData.js';
+import { getItem } from "../DynamoDBService/DynamoDBService.js";
 
 export const getProduct = async (event) => {
   try {
-    const mockData = await MockDataService.getData();
-
     const itemID = event.pathParameters.itemId;
-    const product = mockData.filter(item => item.id === itemID);
+    const productsTable = process.env.productsTable;
+    const stocksTable = process.env.stockTable;
+    
+    const product = await getItem(productsTable, itemID);
+    const productInStock = await getItem(stocksTable, itemID);
+
+    const item = {
+      ...product,
+      count: productInStock.count
+    }
   
     const response = {
       statusCode: 200,
-      body: JSON.stringify(product[0]),
+      body: JSON.stringify(item),
       headers: { 'Content-Type': 'application/json' }
     };
   
@@ -18,7 +25,7 @@ export const getProduct = async (event) => {
   } catch (error) {
       const response = {
       statusCode: 500,
-      message: "Product not found"
+      message: "Product not found",
     }
     
     return response;

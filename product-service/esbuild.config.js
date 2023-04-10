@@ -3,10 +3,7 @@ import * as esbuild from "esbuild";
 await esbuild
   .build({
     entryPoints: [
-      "./package.json",
-      "./mocks/mockData.js",
-      "./handlers/availableProducts.js",
-      "./handlers/product.js",
+      "./index.js"
     ],
     bundle: true,
     outdir: "dist",
