@@ -1,4 +1,4 @@
-import { putItem } from "../DynamoDBService/DynamoDBService.js";
+import { putTransaction } from "../DynamoDBService/DynamoDBService.js";
 
 export const createProduct = async (event) => {
   console.log("create product properties", JSON.parse(event.body));
@@ -26,40 +26,37 @@ export const createProduct = async (event) => {
     const newProductId = `bc-${Date.now()}`;
     // crypto.randomUUID()
 
-    const productsResult = await putItem(
+    const params = [
       {
-        id: newProductId,
-        description: newProduct.description,
-        title: newProduct.title,
-        price: newProduct.price,
+        data: {
+          description: {S: newProduct.description},
+          id: {S: newProductId},
+          price: {N: newProduct.price.toString()},
+          title: {S: newProduct.title},
+        },
+        table: productsTable
       },
-      productsTable
-    );
-    const stocksResult = await putItem(
       {
-        id: newProductId,
-        count: newProduct.count,
+        data: {
+          id: {S: newProductId},
+          count: {N: newProduct.count.toString()},
+        },
+        table: stocksTable
       },
-      stocksTable
-    );
+    ]
+
+    const data = await putTransaction(params);
 
     const response = {
       statusCode: 200,
-      body: JSON.stringify({
-        productsResult: {
-          statusCode: productsResult.$metadata.httpStatusCode,
-        },
-        stocksResult: {
-          statusCode: stocksResult.$metadata.httpStatusCode,
-        },
-      }),
+      body: JSON.stringify({statusCode: data.$metadata.httpStatusCode}),
     };
 
     return response;
   } catch (error) {
     const response = {
       statusCode: 500,
-      message: "Products list not found",
+      message: "Products wasn't created",
     };
 
     return response;
