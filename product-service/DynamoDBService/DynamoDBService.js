@@ -11,7 +11,12 @@ export const putItem = async (item, table) => {
     
     return data;
   } catch (err) {
-    console.log("Error", err.stack);
+    const response = {
+      statusCode: 500,
+      message: "Server error",
+    };
+
+    return response;
   }
 };
 
@@ -25,7 +30,12 @@ export const getList = async (table) => {
 
     return data.Items;
   } catch (error) {
-    console.log("Error", error.stack);
+    const response = {
+      statusCode: 500,
+      message: "Server error",
+    };
+
+    return response;
   }
 };
 
@@ -42,6 +52,11 @@ export const getItem = async (table, itemId) => {
 
     return data.Item;
   } catch (error) {
-    console.log("Error", error.stack);
+    const response = {
+      statusCode: 500,
+      message: "Server error",
+    };
+
+    return response;
   }
 };

@@ -165,13 +165,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          # - AttributeName: title
-          #   AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          # - AttributeName: title
-          #   KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
@@ -182,13 +178,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          # - AttributeName: count
-          #   AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          # - AttributeName: count
-          #   KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5

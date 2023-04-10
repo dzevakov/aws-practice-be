@@ -1,6 +1,7 @@
 import { getItem } from "../DynamoDBService/DynamoDBService.js";
 
 export const getProduct = async (event) => {
+  console.log("get item Id:", event.pathParameters.itemId);
   try {
     const itemID = event.pathParameters.itemId;
     const productsTable = process.env.productsTable;
