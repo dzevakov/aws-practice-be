@@ -4,7 +4,7 @@ info:
   description: Bicycle Shop API
   version: '1'  
 servers:
-  - url: https://h7mjy48u62.execute-api.us-east-1.amazonaws.com
+  - url: https://8jduv2iljh.execute-api.us-east-1.amazonaws.com
 tags:
   - name: products
     description: Product Service domain
@@ -22,15 +22,57 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'          
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'          
+                  stocks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Stock'          
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - createProduct
+      summary: create product
+      description: create product
+      operationId: createProduct
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProduct'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productsResult:
+                    type: object
+                    properties:
+                      statusCode:
+                        type: string
+                        example: '200'
+                  stocksResult:
+                    type: object
+                    properties:
+                      statusCode:
+                        type: string
+                        example: '200'   
         '500':
           description: Internal server error
   /products/{itemId}:
     get:
       tags:
-        - products
+        - product
       summary: Finds Product by ID
       description: Retursn product by ID.
       operationId: getProduct
@@ -50,9 +92,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Product'          
+                $ref: '#/components/schemas/Product'          
         '400':
           description: Invalid tag value
 components:
@@ -72,6 +112,27 @@ components:
         title:
           type: string
           example: Bombtrack
+    Stock:
+      type: object
+      properties:
+        id:
+          type: string
+          example: bc-1
         count:
           type: number
           example: 1
+    NewProduct:
+      type: object
+      properties:
+        description:
+          type: string
+          example: New Bike
+        count:
+          type: number
+          example: 3
+        price:
+          type: number
+          example: 3000
+        title:
+          type: string
+          example: New Bike

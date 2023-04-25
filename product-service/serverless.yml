@@ -22,7 +22,7 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
 
 # you can overwrite defaults here
   stage: dev
@@ -32,34 +32,36 @@ provider:
     cors: true
 
 # you can add statements to the Lambda function's IAM Role here
-#  iam:
-#    role:
-#      statements:
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:ListBucket"
-#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:PutObject"
-#          Resource:
-#            Fn::Join:
-#              - ""
-#              - - "arn:aws:s3:::"
-#                - "Ref" : "ServerlessDeploymentBucket"
-#                - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        "arn:aws:dynamodb:us-east-1:810215748827:table/bicycle_shop_products"
+    - Effect: "Allow"
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        "arn:aws:dynamodb:us-east-1:810215748827:table/bicycle_shop_stock"
 
 # you can add packaging information here
-#package:
+# package:
 #  patterns:
-#    - '!exclude-me.js'
-#    - '!exclude-me-dir/**'
-#    - include-me.js
-#    - include-me-dir/**
+#   - "!*/**"
+#   - "!*/service.js"
+#   - "dist/**"
 	
 custom:
   documentation:
@@ -98,12 +100,27 @@ functions:
       - httpApi:
           path: /products/{itemId}
           method: GET
+    environment:
+      productsTable: ${self:resources.Resources.productsTable.Properties.TableName}
+      stockTable: ${self:resources.Resources.stockTable.Properties.TableName}
   getProductsList:
     handler: handlers/availableProducts.getProductsList
     events:
       - httpApi:
           path: /products
           method: GET
+    environment:
+      productsTable: ${self:resources.Resources.productsTable.Properties.TableName}
+      stockTable: ${self:resources.Resources.stockTable.Properties.TableName}
+  createProduct:
+    handler: handlers/createProduct.createProduct
+    events:
+      - httpApi:
+          path: /products
+          method: POST
+    environment:
+      productsTable: ${self:resources.Resources.productsTable.Properties.TableName}
+      stockTable: ${self:resources.Resources.stockTable.Properties.TableName}
                         
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
@@ -139,13 +156,31 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    productsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: bicycle_shop_products
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    stockTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: bicycle_shop_stock
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
