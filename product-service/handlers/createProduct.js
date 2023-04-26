@@ -1,7 +1,6 @@
 import { putTransaction } from "../DynamoDBService/DynamoDBService.js";
 
 export const createProduct = async (event) => {
-  console.log("create product properties", JSON.parse(event.body));
   try {
     const productsTable = process.env.productsTable;
     const stocksTable = process.env.stockTable;

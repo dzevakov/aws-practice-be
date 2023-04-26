@@ -43,6 +43,9 @@ provider:
       Resource:
         "arn:aws:s3:::bicycle-store-imports/*"
 
+  environment:
+    CATALOG_ITEM_QUEUE_URL: ${cf:product-service-dev.catalogItemsQueueUrl}
+
 custom:
   client:
     bucketName: bicycle-store-imports
