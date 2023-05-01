@@ -1,20 +1,30 @@
 import { S3 } from "@aws-sdk/client-s3";
 import csv from "csv-parser";
+import { sendMessage } from "../aws-services/sqs-service.js";
 const BUCKET = process.env.importBucket;
 
 const getObject = async (params) => {
-  const s3 = new S3({ region: "us-east-1" });
+  try {
+    const s3 = new S3({ region: "us-east-1" });
 
   const s3ResponseStream = (await s3.getObject(params)).Body;
   const result = [];
 
-  s3ResponseStream.pipe(csv()).on("data", (data) => {
-    console.log("product data", data);
+  s3ResponseStream.pipe(csv()).on("data", async(data) => {
+    const res = await sendMessage(data);
+
     result.push(data);
   }).on("end", () => {
     return result;
   });
+  } catch (error) {
+    const response = {
+      statusCode: 500,
+      message: error,
+    };
 
+    return response;
+  }
 };
 
 export const importFileParser = async (event) => {
@@ -47,6 +57,7 @@ export const importFileParser = async (event) => {
       statusCode: 500,
       message: "Server error",
     };
+    console.log("importFileParser my error", error);
 
     return response;
   }

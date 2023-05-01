@@ -33,7 +33,7 @@ export const products = [
     description: "Electric Trekking Bike - gold brown",
     id: "bc-6",
     price: 4100,
-    title: "FOCUS AVENTURA"
+    title: "FOCUS AVENTURA 2"
   },
 ]
 
@@ -66,6 +66,9 @@ export const stocks = [
 
 export class MockDataService {
   static getData () {
-    return  Promise.resolve(products);  
+    return  Promise.resolve({
+      products: products,
+      stocks: stocks
+    });  
   } 
 } 
