@@ -1,0 +1,32 @@
+service: authorization-service
+frameworkVersion: '3'
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+  stage: dev
+  region: us-east-1
+
+  httpApi:
+    cors: true
+
+plugins:
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    path: ../.env
+
+functions:
+  basicAuthorizer:
+    handler: handlers/basicAuthorizer.basicAuthorizer
+
+# resources:
+#   Outputs:
+#     basicAuthorizerArn:
+#       Value: {Fn::GetAtt: [ basicAuthorizer, Arn ]}
+#       Export:
+#         Name: basicAuthorizerArn

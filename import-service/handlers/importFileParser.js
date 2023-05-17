@@ -32,10 +32,12 @@ export const importFileParser = async (event) => {
 
   try {
     for (const record of event.Records) {
-      const s3Object = await getObject({
-        Bucket: BUCKET,
-        Key: record.s3.object.key,
-      });
+      // mocked to not use DynamoDB
+
+      // const s3Object = await getObject({
+      //   Bucket: BUCKET,
+      //   Key: record.s3.object.key,
+      // });
 
       await s3.copyObject({
         Bucket: BUCKET,

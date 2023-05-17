@@ -8,6 +8,7 @@
     "test": "jest",
     "build-product": "node product-service/esbuild.config.js",
     "build-import": "node import-service/esbuild.config.js",
+    "build-auth": "node authorization-service/esbuild.config.js",
     "tables-init": "node utils/fillProductsTables.js"
   },
   "repository": {
@@ -34,6 +35,7 @@
     "@aws-sdk/lib-dynamodb": "^3.309.0",
     "@aws-sdk/s3-request-presigner": "^3.312.0",
     "aws-sdk": "^2.1353.0",
-    "csv-parser": "^3.0.0"
+    "csv-parser": "^3.0.0",
+    "serverless-dotenv-plugin": "^6.0.0"
   }
 }

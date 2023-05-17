@@ -76,6 +76,8 @@ provider:
         - sns:Publish
       Resource: { Ref: createProductTopic }
 
+plugins:
+  - serverless-dotenv-plugin
 
 # you can add packaging information here
 # package:
